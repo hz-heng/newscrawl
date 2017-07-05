@@ -5,8 +5,8 @@
 # Don't forget to add your pipeline to the ITEM_PIPELINES setting
 # See: http://doc.scrapy.org/en/latest/topics/item-pipeline.html
 
-from newspaperspider import settings
-from newspaperspider.items import newsItem
+from newscrawl import settings
+from newscrawl.items import newsItem
 from pymongo import MongoClient
 
 
