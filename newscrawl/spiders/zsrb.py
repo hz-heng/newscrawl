@@ -10,7 +10,6 @@ import time
 class ZsrbSpider(scrapy.Spider):
     name = "zsrb"
     allowed_domains = ["zsnews.cn"]
-    #start_urls = ['http://zsnews.cn/']
     base_url = "http://epaper.zsnews.cn/zsrb/"
     today = datetime.today()
 
@@ -42,7 +41,6 @@ class ZsrbSpider(scrapy.Spider):
         item = newsItem()
         list_title = response.xpath('//td[@id="ContentArea_ArticleTitle_Title"]/text()').extract()
         title = "".join(list_title)
-        #list_author = response.xpath('//div[@id="ContentArea_ArticleSource"]/text()').extract()
         list_page = response.xpath('//span[@id="ArticlePageHead_thisPage"]/text()').extract()
         page = "".join(list_page)
         list_content = response.xpath('//td[@id="ContentArea_ArticleContent"]/text()').extract()
