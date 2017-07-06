@@ -8,6 +8,7 @@
 from newscrawl import settings
 from newscrawl.items import newsItem
 from pymongo import MongoClient
+from datetime import datetime
 
 
 class NewscrawlPipeline(object):
@@ -33,9 +34,10 @@ class MongoDBPipeline(object):
             issue_date = item['issue_date']
             category = item['category']
             content = item['content']
+            page = item['page']
             self.collection.insert({
                 'title': title,
-                'issue_date': issue_date,
+                'issue_date': datetime.strptime(issue_date, '%Y-%m-%d'),
                 'category': category,
                 'content': content,
                 'page': page
