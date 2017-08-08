@@ -5,7 +5,10 @@
 # See documentation in:
 # http://doc.scrapy.org/en/latest/topics/spider-middleware.html
 
+import random
 from scrapy import signals
+from newscrawl import settings
+from scrapy.downloadermiddleware.useragent import UserAgentMiddleware
 
 
 class NewscrawlSpiderMiddleware(object):
