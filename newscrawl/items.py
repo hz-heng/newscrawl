@@ -15,7 +15,9 @@ class NewscrawlItem(scrapy.Item):
 
 class newsItem(scrapy.Item):
     title = scrapy.Field()
-    issue_date = scrapy.Field()
+    date = scrapy.Field()
     category = scrapy.Field()
     content = scrapy.Field()
     page = scrapy.Field()
+    url = scrapy.Field()
+    newspapers = scrapy.Field()
