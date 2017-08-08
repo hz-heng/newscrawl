@@ -31,14 +31,18 @@ class MongoDBPipeline(object):
     def process_item(self, item, spider):
         if isinstance(item, newsItem):
             title = item['title']
-            issue_date = item['issue_date']
+            date = item['date']
             category = item['category']
             content = item['content']
             page = item['page']
+            url = item['url']
+            newspapers = item[newspapers]
             self.collection.insert({
                 'title': title,
-                'issue_date': datetime.strptime(issue_date, '%Y-%m-%d'),
+                'date': datetime.strptime(date, '%Y-%m-%d'),
                 'category': category,
                 'content': content,
-                'page': page
+                'page': page,
+                'url': url,
+                'newspapers': newspapers
             })
