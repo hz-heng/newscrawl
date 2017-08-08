@@ -54,3 +54,12 @@ class NewscrawlSpiderMiddleware(object):
 
     def spider_opened(self, spider):
         spider.logger.info('Spider opened: %s' % spider.name)
+        
+class RandomUserAgentMiddleware(UserAgentMiddleware):
+    def __init__(self, user_agent=''):
+        self.user_agent = user_agent
+
+    def process_request(self, request, spider):
+        ua = random.choice(settings.USER_AGENT_LIST)
+        if ua:
+            request.headers['User-Agent'] = ua
