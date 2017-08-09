@@ -8,7 +8,7 @@
 import random
 from scrapy import signals
 from newscrawl import settings
-from scrapy.downloadermiddleware.useragent import UserAgentMiddleware
+from scrapy.downloadermiddlewares.useragent import UserAgentMiddleware
 
 
 class NewscrawlSpiderMiddleware(object):
