@@ -36,7 +36,7 @@ class MongoDBPipeline(object):
             content = item['content']
             page = item['page']
             url = item['url']
-            newspapers = item[newspapers]
+            newspapers = item['newspapers']
             self.collection.insert({
                 'title': title,
                 'date': datetime.strptime(date, '%Y-%m-%d'),
