@@ -1,7 +1,6 @@
 # -*- coding: utf-8 -*-
 import scrapy
 from scrapy.http import Request
-import re
 from datetime import datetime
 from newscrawl.items import newsItem
 import time
@@ -10,7 +9,7 @@ import time
 class ZhongShanDailySpider(scrapy.Spider):
     name = "zhongshandaily"
     allowed_domains = ["zsnews.cn"]
-    base_url = "http://epaper.zsnews.cn/zsrb/"
+    base_url = "http://www.zsnews.cn/EPaper/zsrb/"
     newspapers = "中山日报"
     today = datetime.today()
 
@@ -21,14 +20,13 @@ class ZhongShanDailySpider(scrapy.Spider):
         yield Request(url, self.parse)
 
     def parse(self, response):
-        pages = response.xpath('//*[@id="FastEditionList"]/table/tr/td[@onclick]/@onclick').extract()
+        pages = response.xpath('//*[@id="FastEditionList"]/table/tr/td/a/@href').extract()
         #当前页面没数据则重爬
         if response.status == 404 or not pages:
             time.sleep(1800) #等待30分钟
             yield Request(response.url, self.parse, dont_filter=True) #设置不过滤URL(实现不过滤重复URL)
         for page in pages:
-            page_index = re.findall('\d{1,}', page)
-            url = self.base_url + 'ShowIndex.asp?paperdate=%s&part=%s' % (page_index[0], page_index[1])
+            url = self.base_url + page
             yield Request(url, self.page_parse)
 
     def page_parse(self, response):
@@ -38,20 +36,13 @@ class ZhongShanDailySpider(scrapy.Spider):
             yield Request(url, self.article_parse)
 
     def article_parse(self, response):
-        list_title = response.xpath('//td[@id="ContentArea_ArticleTitle_Title"]/text()').extract()
-        title = "".join(list_title)
-        list_page = response.xpath('//span[@id="ArticlePageHead_thisPage"]/text()').extract()
-        page = "".join(list_page)
-        list_content = response.xpath('//td[@id="ContentArea_ArticleContent"]/text()').extract()
-        content = "".join(list_content)
-        list_date = response.xpath('//span[@id="ArticlePageHead_thisPaperDate"]/text()').extract()
-        str_date = "".join(list_date)
+        title = response.xpath('//td[@id="ContentArea_ArticleTitle_Title"]/text()').extract_first()
+        page = response.xpath('//span[@id="ArticlePageHead_thisPage"]/text()').extract_first()
+        content = response.xpath('//td[@id="ContentArea_ArticleContent"]/text()').extract_first()
+        str_date = response.xpath('//span[@id="ArticlePageHead_thisPaperDate"]/text()').extract_first()
         date = str_date.replace('/', '-')
-        list_category = response.xpath('//span[@id="ArticlePageHead_thisNote"]/text()').extract()
-        category = "".join(list_category)
-        if content == "":
-            pass
-        else:
+        category = response.xpath('//span[@id="ArticlePageHead_thisNote"]/text()').extract_first()
+        if content != "":
             item = newsItem()
             item['title'] = title
             item['page'] = page
