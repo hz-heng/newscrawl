@@ -38,7 +38,8 @@ class ZhongShanDailySpider(scrapy.Spider):
     def article_parse(self, response):
         title = response.xpath('//td[@id="ContentArea_ArticleTitle_Title"]/text()').extract_first()
         page = response.xpath('//span[@id="ArticlePageHead_thisPage"]/text()').extract_first()
-        content = response.xpath('//td[@id="ContentArea_ArticleContent"]/text()').extract_first()
+        list_content = response.xpath('//td[@id="ContentArea_ArticleContent"]/text()').extract()
+        content = "".join(list_content)
         str_date = response.xpath('//span[@id="ArticlePageHead_thisPaperDate"]/text()').extract_first()
         date = str_date.replace('/', '-')
         category = response.xpath('//span[@id="ArticlePageHead_thisNote"]/text()').extract_first()
